@@ -5,7 +5,7 @@ local session_files = {}
 local edited_files_cache = nil
 local project_root = vim.loop.cwd() -- luacheck: ignore 113/vim
 
--- Add a file to session_files
+-- Function to add a file to session_files
 local function track_session_file()
 	local filepath = vim.api.nvim_buf_get_name(0)
 	local buf = vim.api.nvim_get_current_buf()
@@ -223,16 +223,6 @@ local function setup()
 		desc = "Invalidate edited files cache on write",
 	})
 
-	-- Register Telescope extension
-	pcall(function()
-		require("telescope").register_extension({
-			exports = {
-				recent_files = recent_files_picker,
-			},
-		})
-	end)
-
-	-- Default keymap
 	vim.keymap.set(
 		"n",
 		"<leader>fr",
@@ -240,7 +230,6 @@ local function setup()
 		{ desc = "Recent Files (Session)" }
 	)
 
-	-- Debug command
 	vim.api.nvim_create_user_command("PrintSessionFilesCount", function()
 		print("Number of session files: " .. #session_files)
 	end, { desc = "Print the number of tracked session files" })
@@ -249,7 +238,7 @@ end
 -- Automatically call setup when the module is loaded
 setup()
 
--- Export the picker function for manual use if desired
+-- Telescope extension exports
 M.recent_files = recent_files_picker
 
 return M
